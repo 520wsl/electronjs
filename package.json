@@ -1,0 +1,92 @@
+{
+  "name": "sixi.client.electronjs",
+  "description": "喜小帮",
+  "version": "0.1.6",
+  "author": "杭州四喜信息技术有限公司",
+  "private": true,
+  "license": "UNLICENSED",
+  "homepage": "http://www.sixi.com/",
+  "contributors": [
+    {
+      "name": "clys"
+    }
+  ],
+  "main": "electron/dev.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "npm run package:linux && npm run package:win",
+    "package:linux": "electron-builder --linux",
+    "package:win32": "electron-builder --win --ia32",
+    "package:win64": "electron-builder --win --x64",
+    "package:win": "electron-builder --win --x64 --ia32",
+    "build": "vue-cli-service build && npm run package",
+    "build:linux": "vue-cli-service build && npm run package:linux",
+    "build:win32": "vue-cli-service build && npm run package:win32",
+    "build:win64": "vue-cli-service build && npm run package:win64",
+    "build:win": "vue-cli-service build && npm run package:win",
+    "build:vue": "vue-cli-service build",
+    "dev": "node . -run-dev",
+    "dev:vue": "vue-cli-service serve",
+    "lint:vue": "vue-cli-service lint"
+  },
+  "build": {
+    "appId": "sixi.client.electronjs",
+    "productName": "喜小帮",
+    "copyright": "Copyright©2008-2018 All rights reserved ${author}",
+    "artifactName": "xxb_${os}_${version}.${ext}",
+    "win": {
+      "icon": "public/logo.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "menuCategory": true
+    },
+    "linux": {
+      "icon": "public/logo.png",
+      "category": "Office"
+    },
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://172.30.34.87/electron"
+      }
+    ],
+    "directories": {
+      "buildResources": "electron/build/"
+    }
+  },
+  "dependencies": {
+    "Base64": "^1.0.2",
+    "axios": "^0.18.0",
+    "crypto-js": "^3.1.9-1",
+    "electron-updater": "^4.0.6",
+    "iconv-lite": "^0.4.24",
+    "iview": "^3.3.0",
+    "node-schedule": "^1.3.2",
+    "systeminformation": "^4.0.16",
+    "vue": "^2.6.6",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1",
+    "winreg": "^1.2.4"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.4.0",
+    "@vue/cli-plugin-eslint": "^3.4.0",
+    "@vue/cli-service": "^3.4.0",
+    "argparse": "^1.0.10",
+    "babel-eslint": "^10.0.1",
+    "bluebird-lst": "^1.0.7",
+    "buffer-from": "^1.1.1",
+    "builder-util-runtime": "^8.2.0",
+    "colors": "^1.3.3",
+    "electron": "^4.0.6",
+    "electron-builder": "^20.38.5",
+    "eslint": "^5.8.0",
+    "eslint-plugin-vue": "^5.0.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.1.0",
+    "vue-template-compiler": "^2.5.21"
+  }
+}

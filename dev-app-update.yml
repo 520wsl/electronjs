@@ -1,0 +1,5 @@
+appId: 喜小帮
+publish:
+  - provider: generic
+    url: 'http://172.30.34.87/electron'
+electronVersion: 4.0.7
