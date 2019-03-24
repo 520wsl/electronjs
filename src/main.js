@@ -6,10 +6,11 @@ import Api from './js/api'
 import Utils from './js/utils'
 import Ws from './js/webSocket'
 import iView from 'iview';
-import 'iview/dist/styles/iview.css';
+// import 'iview/dist/styles/iview.css';
 
 import electron from './electron'
 import _APP_CONFIG_ from './electron/APP_CONFIG.js';
+import '../erp-ui-theme/dist/iview.css';
 
 Vue.use(iView);
 
