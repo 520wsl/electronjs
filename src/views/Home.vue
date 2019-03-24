@@ -63,6 +63,11 @@
         components: {
             User
         },
+        methods: {
+            search() {
+              window.location.href="http://172.30.34.114:8081/personal/index?par=cGFnZU5hbWUlM0RwZXJzb25hbFNlcnZpZQ%3D%3D&code=34077706522071040&state=electron"
+            }
+        },
         data() {
             return {
                 historyModal: false,
