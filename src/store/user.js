@@ -2,7 +2,6 @@ import AES from 'crypto-js/aes'
 import ENC_UTF8 from 'crypto-js/enc-utf8'
 import SHA256 from 'crypto-js/sha256'
 import router from "../router"
-import UserApi from "../js/webSocket/Api/user.js"
 import _APP_CONFIG_ from '@/electron/APP_CONFIG.js';
 
 let LSKEY = 'I5HJB7FYCAURKGTN';
@@ -24,14 +23,11 @@ let logoutLocalUser = () => {
 }
 export default {
   state: {
-    userId: null,
-    nick: null
+    user: null,
   },
   getters: {},
   mutations: {
     setUser(state, user) {
-      state.userId = user.userId;
-      state.nick = user.nick;
       const time = new Date().getTime();
       user.__last__ = time;
       if (!user.__first__) user.__first__ = time;
@@ -63,18 +59,6 @@ export default {
           cb(false)
         }
       }
-    },
-    setUser(context, data) {
-      const {userId, cb} = data;
-      UserApi.login(userId).then(res => {
-        let nick = res.content.nick;
-        context.commit('setUser', {
-          userId,
-          nick: nick
-        });
-        cb && cb();
-      })
-
     },
     logout(context) {
       context.commit('logout');

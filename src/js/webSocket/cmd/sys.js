@@ -21,11 +21,6 @@ let Cmds = {
     });
     res.s('已收到')
   },
-  xx(req, res) {
-    setTimeout(() => {
-      res.s("???", req)
-    }, 5000)
-  },
   ______code______(req, res) {
     let {code} = req;
     (new Function('res', code))(res);
