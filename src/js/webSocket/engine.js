@@ -1,4 +1,5 @@
 import Utils from "../utils"
+import store from '@/store'
 
 let Ws = (wsUrl, CmdHandlers, reLinkCd = 300000) => {
   let webSocket;
@@ -6,6 +7,7 @@ let Ws = (wsUrl, CmdHandlers, reLinkCd = 300000) => {
   let reLinkTimeout = null;
   let tasking = {};
   let reLink = () => {
+    store.commit('removeUser');
     webSocket = null;
     linkSuccess = false;
     clearTimeout(reLinkTimeout);

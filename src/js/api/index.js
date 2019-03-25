@@ -1,5 +1,5 @@
 import axios from 'axios';
-import UserApi from './user'
+// import UserApi from './user'
 
 const instance = axios.create({
   baseURL: '/api',
@@ -89,7 +89,7 @@ likePost.forEach(method => {
 
 
 api['api'] = {
-  [UserApi.name]: UserApi.api(api)
+  // [UserApi.name]: UserApi.api(api)
 };
 
 export default api;

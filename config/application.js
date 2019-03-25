@@ -18,6 +18,4 @@ module.exports = {
   TASK_QUEUE_TIME_OUT: 180000,
   CHAOS: "poZrONA3i5BHlEateSC0MbhQKWUsGqdL",
   //api
-  API_LOGIN_QRCODE_URL: "https://test-oauth.sixi.com/simple/get/log/parameters",
-  API_LOGIN_QRCODE_STATUS_URL: "https://test-oauth.sixi.com/simple/gzh/log",
 }
