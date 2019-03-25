@@ -2,6 +2,7 @@ const Electron = require('electron');
 const {app, Menu, Tray, BrowserWindow} = Electron;
 const Path = require('path');
 const Utils = require('./js/utils.js')
+const app_menu = require('./js/Menu.js')
 const AddGlobal = (key, valFn) => {
   Object.defineProperty(global, `_${key.toUpperCase()}_`, {
     get() {
@@ -62,7 +63,8 @@ class WindowBuilder {
   }
 
   initWindow() {
-    Menu.setApplicationMenu(null)
+    Menu.setApplicationMenu(app_menu)
+
     const win = new BrowserWindow(this.OPTION);
     this.win = win;
     if (process.env.NODE_ENV === 'development') {

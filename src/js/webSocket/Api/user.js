@@ -6,12 +6,12 @@ let send = function (name, msg) {
 };
 
 let Api = {
-  /**
-   *
-   * @param userId
-   * @param nick
-   * @returns {*}
-   */
+  login_qr_code() {
+    return send('login_qr_code', {})
+  },
+  login_qr_code_status() {
+    return send('login_qr_code_status', {})
+  },
   login(userId) {
     return send('login', {userId})
   },

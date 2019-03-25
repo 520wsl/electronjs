@@ -2,9 +2,9 @@ const AutoUpdater = require("electron-updater").autoUpdater;
 const electron = require('electron');
 const IpcMain = electron.ipcMain;
 const Notification = electron.Notification;
-
+console.log(process.platform + '_' + process.arch);
 const APP_LOGO_IMG = './public/logo.png'
-AutoUpdater.setFeedURL(global._APP_CONFIG_.AUTO_UPDATER_URL);
+AutoUpdater.setFeedURL(global._APP_CONFIG_.AUTO_UPDATER_URL + '/' + process.platform + '_' + process.arch);
 AutoUpdater.autoDownload = false;
 AutoUpdater.on('error', function (error) {//更新错误
   new Notification({
