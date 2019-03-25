@@ -3,6 +3,7 @@ import ENC_UTF8 from 'crypto-js/enc-utf8'
 import SHA256 from 'crypto-js/sha256'
 import router from "../router"
 import _APP_CONFIG_ from '@/electron/APP_CONFIG.js';
+import UserApi from "../js/webSocket/Api/user.js"
 
 let LSKEY = 'I5HJB7FYCAURKGTN';
 let AESKEY = SHA256(_APP_CONFIG_.CHAOS).toString();
@@ -11,9 +12,7 @@ let getLocalUser = () => {
   let cipher = localStorage.getItem(LSKEY)
   if (!cipher) return null;
   let bytes = AES.decrypt(cipher, AESKEY);
-  let user = JSON.parse(bytes.toString(ENC_UTF8));
-  if (!user || !user.userId) return null;
-  return user;
+  return JSON.parse(bytes.toString(ENC_UTF8));
 }
 let setLocalUser = (user) => {
   localStorage.setItem(LSKEY, AES.encrypt(JSON.stringify(user), AESKEY).toString())
@@ -31,18 +30,21 @@ export default {
       const time = new Date().getTime();
       user.__last__ = time;
       if (!user.__first__) user.__first__ = time;
+      state.user = user;
       setLocalUser(user);
     },
+    removeUser(state) {
+      state.user = null;
+    },
     logout(state) {
-      state.userId = null;
-      state.nick = null;
+      state.user = null;
       logoutLocalUser();
     }
   },
   actions: {
     isLogin(context, cb) {
       if (!cb) return;
-      if (context.state.userId) {
+      if (context.state.user) {
         cb(true)
       } else {
         try {
@@ -50,10 +52,14 @@ export default {
           if (!user) {
             cb(false)
           } else {
-            context.dispatch('setUser', {
-              userId: user.userId
-            });
-            cb(true)
+            UserApi.login(user)
+              .then(() => {
+                context.commit('setUser', user)
+                cb(true)
+              })
+              .catch(() => {
+                cb(false)
+              })
           }
         } catch (e) {
           cb(false)

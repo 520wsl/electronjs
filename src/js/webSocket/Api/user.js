@@ -12,8 +12,8 @@ let Api = {
   login_qr_code_status() {
     return send('login_qr_code_status', {})
   },
-  login(userId) {
-    return send('login', {userId})
+  login(user) {
+    return send('login', {user})
   },
   logout(userId, nick) {
     return send('login', {userId, nick})

@@ -5,6 +5,9 @@
     <!--<p>测试</p>-->
     <!--</div>-->
     <div>
+        <div style="width: 100%;text-align: right;padding: 5px">
+            <User></User>
+        </div>
         <Card>
             <div slot="title">喜小帮查排名</div>
             <div slot="extra"><a>退出登录</a>微信昵称</div>
