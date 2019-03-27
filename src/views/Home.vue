@@ -5,7 +5,12 @@
     <!--<p>测试</p>-->
     <!--</div>-->
     <div>
-        <User></User>
+        <div style="width: 100%;text-align: right;padding: 5px">
+            <User></User>
+        </div>
+        <div>
+            <Button @click="toXX">登录其它系统</Button>
+        </div>
         <div style="padding:0 30px;">
             <Crumbs title="查排名"></Crumbs>
             <section class="search">
@@ -66,6 +71,16 @@
             Crumbs
         },
         methods: {
+            toXX(){
+                this.User.otherSysLoginUrl("https://www.baidu.com","asd").then(url=>{
+                  console.log(url);
+                  window.location.href = url;
+                }).catch(err=>{
+                    if(err && err.msg){
+                        this.$Message.error(err.msg)
+                    }
+                })
+            },
             search() {
                 window.location.href = "http://172.30.34.114:8081/personal/index?par=cGFnZU5hbWUlM0RwZXJzb25hbFNlcnZpZQ%3D%3D&code=34077706522071040&state=electron"
             }

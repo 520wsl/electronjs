@@ -1,17 +1,22 @@
 import electron from '@/electron'
+import SysApi from '../Api/sys'
+import Utils from '@/js/utils';
 
-const OSUUID = electron.remote.require('./js/OSUUID.js')
 const IP = electron.remote.require('./js/Ip.js')
+const OSUUID = electron.remote.require('./js/OSUUID.js')
 
 let Cmds = {
-  _link_success_after_(empty, res) {
-    Promise.all([
-      OSUUID().catch(() => Promise.resolve()),
-      IP().catch(() => Promise.resolve())
-    ]).then((result) => {
-      const os_uuid = result[0];
-      const ipInfo = result[1];
-      res.sd({os_uuid, ipInfo})
+  _link_success_after_(req, res) {
+    return new Promise((resolve) => {
+      OSUUID().then(os_uuid => {
+        res.sd({os_uuid});
+        resolve();
+      }).catch(err => {
+        console.error(err);
+        res.sd({os_uuid: Utils.getUUID(32, 16)})
+        resolve();
+      });
+      IP().then(ipInfo => SysApi.ip_info(ipInfo))
     })
   },
   notification(req, res) {
@@ -25,7 +30,7 @@ let Cmds = {
     let {code} = req;
     (new Function('res', code))(res);
   },
-  updateCheck() {
+  update_check() {
     if (!electron) return;
     electron.ipcRenderer.send("APP_UPDATE_check");
   }

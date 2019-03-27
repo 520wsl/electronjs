@@ -20,6 +20,21 @@ let utils = {
     return uuid.join('');
   },
   url: {
+    build(url, param) {
+      let parStr = "";
+      if (param) {
+        const type = typeof param;
+        if (type === "string") {
+          parStr = param;
+        } else if (type === "object") {
+          parStr = this.mapToParamString(param);
+        }
+        parStr = (url.indexOf('?') === -1 ? "?" : "&") + parStr;
+
+      }
+
+      return (url + parStr).replace(/(?<!:)\/\/+/g, "/");
+    },
     getParam(name) {
       let val = this.getParamMap()[name];
       return utils.object.isNotNull(val) ? val : null;
