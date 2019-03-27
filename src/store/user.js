@@ -58,6 +58,7 @@ export default {
                 cb(true)
               })
               .catch(() => {
+                context.commit('logout', user)
                 cb(false)
               })
           }
@@ -66,10 +67,11 @@ export default {
         }
       }
     },
-    logout(context) {
-      context.commit('logout');
-      router.push({name: 'login'})
-
+    logout(context, ecb) {
+      UserApi.logout().then(() => {
+        context.commit('logout');
+        router.push({name: 'login'})
+      }).catch(err => ecb && ecb(err))
     }
   }
 }

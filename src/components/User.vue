@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <Poptip :placement="placement" width="255">
+    <Poptip trigger="hover" :placement="placement" width="255">
       <Avatar :src="wxUser.headimgurl" shape="square" icon="ios-person" size="large"/>
       <div slot="content">
         <Row>
@@ -24,7 +24,7 @@
         </Row>
         <div class="separate"></div>
         <div style="text-align: right">
-          <Button type="text" icon="md-exit" @click="logout">退出登录</Button>
+          <Button type="text" icon="md-exit" @click="toLogout">退出登录</Button>
         </div>
       </div>
     </Poptip>
@@ -63,6 +63,13 @@
     },
     methods: {
       ...mapActions(['logout']),
+      toLogout() {
+        this.logout().catch(err => {
+          if (err && err.msg) {
+            this.$Message.error(err.msg)
+          }
+        })
+      }
     }
   }
 </script>

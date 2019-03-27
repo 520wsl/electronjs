@@ -15,8 +15,11 @@ let Api = {
   login(user) {
     return send('login', {user})
   },
-  logout(userId, nick) {
-    return send('login', {userId, nick})
+  logout() {
+    return send('logout', {})
+  },
+  user_id_code() {
+    return send('user_id_code', {})
   }
 };
 export default Api;

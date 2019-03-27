@@ -17,5 +17,9 @@ module.exports = {
   //任务队列超时时间
   TASK_QUEUE_TIME_OUT: 180000,
   CHAOS: "poZrONA3i5BHlEateSC0MbhQKWUsGqdL",
-  //api
+  //登录其它系统使用的授权链接
+  OAUTH_OTHER_SYS_URL: "https://???/oauth/authorize",
+  //API
+  API_BASE: "https://chrome.open.sixi.com",
+  API_USER_CODE: "/user/code"
 }

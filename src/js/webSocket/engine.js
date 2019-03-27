@@ -108,10 +108,28 @@ let Ws = (wsUrl, CmdHandlers, reLinkCd = 300000) => {
       res.f("没有指令");
       return;
     }
+    let reqData;
+    if (Utils.string.isBlank(data.data)) {
+      reqData = {};
+    } else {
+      try {
+        reqData = JSON.parse(data.data);
+      } catch (e) {
+        reqData = data.data;
+      }
+    }
     if (data.cmd === 'sys.link_success') {
-      linkSuccess = true;
-      _runWSSend();
-      ((CmdHandlers.sys || {})._link_success_after_ || (() => 0))(null, res, data)
+      const _link_success_after_ = (CmdHandlers.sys || {})._link_success_after_;
+      if (_link_success_after_) {
+        _link_success_after_(reqData, res, data).then(() => {
+          linkSuccess = true;
+          _runWSSend();
+        })
+      } else {
+        linkSuccess = true;
+        _runWSSend();
+      }
+
       return;
     }
     if (data.cmd === 'sys.idle') {
@@ -145,16 +163,6 @@ let Ws = (wsUrl, CmdHandlers, reLinkCd = 300000) => {
       console.error('ws:没有找到有效的指令后缀', data);
       res.f('没有找到有效的指令后缀');
       return;
-    }
-    let reqData;
-    if (Utils.string.isBlank(data.data)) {
-      reqData = {};
-    } else {
-      try {
-        reqData = JSON.parse(data.data);
-      } catch (e) {
-        reqData = data.data;
-      }
     }
     if (data.bizId) {
       try {

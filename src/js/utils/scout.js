@@ -396,8 +396,4 @@ for (let fnName in app) {
 
 }
 
-let _temp;
-_temp = app; //这么写是用来给ide定位的
-_temp = _app
-
-export default _temp;
+export default _app;
