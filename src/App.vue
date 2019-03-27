@@ -12,7 +12,7 @@
 <style lang="scss">
     body,
     html {
-        background-color: #f7f7f7;
+        background-color: #f4f4f4;
         height: 100%;
         overflow: hidden;
     }
@@ -44,6 +44,7 @@
         color: #2c3e50;
         font-size: 14px;
         height: 100%;
+        background-color: #f4f4f4;
     }
 
     #nav {

@@ -1,108 +1,167 @@
 <template>
-  <div class="container">
-    <Poptip :placement="placement" width="255">
-      <Avatar :src="wxUser.headimgurl" shape="square" icon="ios-person" size="large"/>
-      <div slot="content">
-        <Row>
-          <i-col span="17" style="padding: 5px" class="nick">
-            <span :title="wxUser.nickname">{{wxUser.nickname}}</span>
-            <img v-if="wxUser.sex === 2" src="../assets/female.png">
-            <img v-if="wxUser.sex === 1" src="../assets/male.png">
-          </i-col>
-          <i-col span="7" style="text-align: center">
-            <img :src="wxUser.headimgurl" class="head-img">
-          </i-col>
-        </Row>
-        <div class="separate"></div>
-        <Row>
-          <i-col span="7" class="label">
-            地区
-          </i-col>
-          <i-col span="17">
-            {{wxUser.province}}&nbsp;{{wxUser.city}}
-          </i-col>
-        </Row>
-        <div class="separate"></div>
-        <div style="text-align: right">
-          <Button type="text" icon="md-exit" @click="logout">退出登录</Button>
+    <div class="flex bk">
+        <div class="flex-left"></div>
+        <div v-if="title" class="content"><img class="sixilog" :src="$config.CDN+'/icon_sixi_logo_min.png'">
+            <div>{{title}}</div>
         </div>
-      </div>
-    </Poptip>
-    <div style="width: 255px;background: pink">
+        <div class="container flex-right" style="width: 160px;">
+            <Poptip :placement="placement" width="255">
+                <Avatar :src="wxUser.headimgurl" shape="square" icon="ios-person" size="large"/>
+                <span class="nickname">{{wxUser.nickname}}</span>
+                <img class="dropdown" :src="$config.CDN+'/icon_drop_down.png'">
+                <div slot="content">
+                    <Row>
+                        <i-col span="17" style="padding: 5px" class="nick">
+                            <span :title="wxUser.nickname">{{wxUser.nickname}}</span>
+                            <img v-if="wxUser.sex === 2" src="../assets/female.png">
+                            <img v-if="wxUser.sex === 1" src="../assets/male.png">
+                        </i-col>
+                        <i-col span="7" style="text-align: center">
+                            <img :src="wxUser.headimgurl" class="head-img">
+                        </i-col>
+                    </Row>
+                    <div class="separate"></div>
+                    <Row>
+                        <i-col span="7" class="label">
+                            地区
+                        </i-col>
+                        <i-col span="17">
+                            {{wxUser.province}}&nbsp;{{wxUser.city}}
+                        </i-col>
+                    </Row>
+                    <div class="separate"></div>
+                    <div style="text-align: right">
+                        <Button type="text" icon="md-exit" @click="logout">退出登录</Button>
+                    </div>
+                </div>
+            </Poptip>
+            <div style="width: 255px;background: pink">
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
-  import {mapState, mapActions} from 'vuex'
+    import {mapState, mapActions} from 'vuex'
 
-  export default {
-    props: {
-      placement: {
-        type: String,
-        default: "bottom-end"
-      },
-    },
-    computed: {
-      ...mapState({
-        user: state => state.user.user,
-      }),
-      wxUser() {
-        return this.user.wx;
-      },
-      sxUser() {
-        return this.user.sx;
-      }
-    },
-    data() {
-      let data = {};
-      return data;
-    },
-    mounted() {
-      console.log(JSON.parse(JSON.stringify(this.user)))
-    },
-    methods: {
-      ...mapActions(['logout']),
+    export default {
+        props: {
+            placement: {
+                type: String,
+                default: "bottom-end"
+            },
+            title: {
+                type: String,
+                default: '喜小帮'
+            }
+        },
+        computed: {
+            ...mapState({
+                user: state => state.user.user,
+            }),
+            wxUser() {
+                return this.user.wx;
+            },
+            sxUser() {
+                return this.user.sx;
+            }
+        },
+        data() {
+            let data = {};
+            return data;
+        },
+        mounted() {
+            console.log(JSON.parse(JSON.stringify(this.user)))
+        },
+        methods: {
+            ...mapActions(['logout']),
+        }
     }
-  }
 </script>
 
 <style scoped lang="scss">
-  .container {
-    display: inline;
-    text-align: left;
+    .container {
+        display: inline;
+        text-align: left;
 
     .separate {
-      margin: 10px 0 5px 0;
-      border-top: #eee solid 1px;
+        margin: 10px 0 5px 0;
+        border-top: #eee solid 1px;
     }
 
     .head-img {
-      width: 64px;
-      height: 64px;
+        width: 64px;
+        height: 64px;
     }
 
     .nick {
-      line-height: 16px;
+        line-height: 16px;
 
-      > span {
+    > span {
         font-size: 16px;
         font-weight: bold;
         max-width: 130px;
         display: inline-block;
         overflow: hidden;
         text-overflow: ellipsis;
-      }
+    }
 
-      > img {
+    > img {
         margin-left: 3px;
         width: 12px;
         height: 12px;
-      }
+    }
+
     }
 
     .label {
-      color: #9E9E9E;
+        color: #9E9E9E;
     }
-  }
+
+    }
+    .nickname {
+        font-size: 14px;
+        padding: 0 10px;
+        color: #444;
+    }
+
+    .flex {
+        display: flex;
+        overflow: hidden;
+
+    .flex-left {
+        float: left;
+    }
+
+    .flex-right {
+        float: right;
+    }
+
+    }
+    .content {
+        flex: 1;
+        text-align: center;
+        display: flex;
+        overflow: hidden;
+        justify-content: center;
+        align-items: center;
+        color: #3A444A;
+        font-size: 16px;
+    }
+
+    .sixilog {
+        width: 15px;
+        height: 15px;
+        display: inline;
+        margin-right: 10px;
+    }
+
+    .bk {
+        justify-content: space-between;
+        align-items: center;
+        height: 64px;
+        width: 100%;
+        border-bottom: 1px solid #eaeaea;
+        background-color: #fff;
+    }
 </style>

@@ -5,12 +5,9 @@
     <!--<p>测试</p>-->
     <!--</div>-->
     <div>
-        <div style="width: 100%;text-align: right;padding: 5px">
-            <User></User>
-        </div>
-        <Card>
-            <div slot="title">喜小帮查排名</div>
-            <div slot="extra"><a>退出登录</a>微信昵称</div>
+        <User></User>
+        <div style="padding:0 30px;">
+            <Crumbs title="查排名"></Crumbs>
             <section class="search">
                 <div class="search-options">店铺：
                     <Select class="search-options-input">
@@ -39,40 +36,43 @@
                     <!--<Page></Page>-->
                 </div>
             </div>
-        </Card>
-        <Modal v-model="historyModal" footer-hide title="历史排名" width="800" :mask-closable="false">
-            <Card>
-                <div slot="title">关键词：椰子鞋 排名目标：第一页 第二名</div>
-                <div slot="extra">
-                    <DatePicker size="small" type="month" placeholder="年-月" style="width: 200px"></DatePicker>
-                </div>
-                <div class="content">
-                    <Table :columns="columns2" :data="data1"></Table>
-                    <div class="page">
-                        <Page></Page>
+            <Modal v-model="historyModal" footer-hide title="历史排名" width="800" :mask-closable="false">
+                <Card>
+                    <div slot="title">关键词：椰子鞋 排名目标：第一页 第二名</div>
+                    <div slot="extra">
+                        <DatePicker size="small" type="month" placeholder="年-月" style="width: 200px"></DatePicker>
                     </div>
-                </div>
-            </Card>
+                    <div class="content">
+                        <Table :columns="columns2" :data="data1"></Table>
+                        <div class="page">
+                            <Page></Page>
+                        </div>
+                    </div>
+                </Card>
 
-        </Modal>
+            </Modal>
+        </div>
     </div>
 
 </template>
 
 <script>
     import User from '@/components/User.vue'
+    import Crumbs from '@/components/Crumbs.vue'
 
     export default {
         components: {
-            User
+            User,
+            Crumbs
         },
         methods: {
             search() {
-              window.location.href="http://172.30.34.114:8081/personal/index?par=cGFnZU5hbWUlM0RwZXJzb25hbFNlcnZpZQ%3D%3D&code=34077706522071040&state=electron"
+                window.location.href = "http://172.30.34.114:8081/personal/index?par=cGFnZU5hbWUlM0RwZXJzb25hbFNlcnZpZQ%3D%3D&code=34077706522071040&state=electron"
             }
         },
         data() {
             return {
+                title: '喜小帮查排名',
                 historyModal: false,
                 columns1: [
                     {
@@ -104,7 +104,7 @@
                         render: (h, params) => {
                             return h('div', [
                                 h(
-                                    'Button',
+                                    'a',
                                     {
                                         style: 'margin:5px;color:#218FFF',
                                         props: {size: 'small'},
@@ -172,6 +172,7 @@
         padding: 30px 20px 20px 20px;
         background: #fff;
         border-radius: 3px;
+        margin-bottom: 20px
         /* box-shadow: 0 2px 4px 0 rgba(222, 223, 224, 0.5); */
     }
 
