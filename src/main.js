@@ -7,11 +7,11 @@ import Utils from './js/utils'
 import User from './js/utils/User'
 import Ws from './js/webSocket'
 import iView from 'iview';
-import 'iview/dist/styles/iview.css';
-
+// import 'iview/dist/styles/iview.css';
+import config from "./../config/application.js";
 import electron from './electron'
 import _APP_CONFIG_ from './electron/APP_CONFIG.js';
-// import '../erp-ui-theme/dist/iview.css';
+import '../erp-ui-theme/dist/iview.css';
 
 Vue.use(iView);
 
@@ -25,8 +25,9 @@ Vue.prototype.User = User;
 Vue.prototype.api = Api.api;
 Vue.prototype.get = Api.get;
 Vue.prototype.post = Api.post;
+Vue.prototype.$config = config;
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app');

@@ -21,5 +21,6 @@ module.exports = {
   OAUTH_OTHER_SYS_URL: "https://???/oauth/authorize",
   //API
   API_BASE: "https://chrome.open.sixi.com",
-  API_USER_CODE: "/user/code"
+  API_USER_CODE: "/user/code",
+    CDN: "http://custom-center.oss-cn-hangzhou.aliyuncs.com/customerCenter/image"
 }
