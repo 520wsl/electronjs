@@ -28,7 +28,7 @@
       },
     },
     mounted() {
-
+      window.document.title = "喜小帮"
     },
     destroyed() {
     }
@@ -74,7 +74,8 @@
     height: 100%;
     background-color: #f4f4f4;
     position: relative;
-    .iframe{
+
+    .iframe {
       position: absolute;
       top: 0;
       bottom: 0;

@@ -11,7 +11,7 @@ const toXxbPar = (par, state) => toXxb('?par=' + par, state)
 const template = [
 
   {
-    label: 'shouye',
+    label: '首页',
     click() {
       global._MAIN_WINDOW_.toHome()
     }
