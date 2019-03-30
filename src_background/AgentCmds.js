@@ -20,8 +20,8 @@ const cmds = {
     User.removeLocalUser();
     res.s();
   },
-  otherSysLoginUrl({redirect_uri, state}, res) {
-    User.otherSysLoginUrl(redirect_uri, state).then(d => res.s(d)).catch(e => res.f(e));
+  otherSysLoginUrl({redirect_uri, client, state}, res) {
+    User.otherSysLoginUrl(redirect_uri, client, state).then(d => res.s(d)).catch(e => res.f(e));
   },
   webSocketCmd({type, cmd, data}, res) {
     if (!WsApi[type]) {

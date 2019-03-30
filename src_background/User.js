@@ -70,13 +70,13 @@ const app = {
   removeUser() {
     _user = null;
   },
-  otherSysLoginUrl(redirect_uri, state = 'sso') {
+  otherSysLoginUrl(redirect_uri, client = 'client', state = 'sso') {
     return new Promise((resolve, reject) => {
       UserApi.user_id_code().then(res => {
         const code = res.content.val;
         const url = Utils.url.build(APP_CONFIG.OAUTH_OTHER_SYS_URL,
           (
-            'response_type=code&client_id=client&'
+            `response_type=code&client_id=${client}&`
             + Utils.url.mapToParamString({
               redirect_uri, state,
               id_code: code,

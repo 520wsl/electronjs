@@ -21,8 +21,8 @@ const reqs = {
   removeLocalUser() {
     return reqSend('removeLocalUser', {});
   },
-  otherSysLoginUrl(redirect_uri, state) {
-    return reqSend('otherSysLoginUrl', {redirect_uri, state});
+  otherSysLoginUrl(redirect_uri, client, state) {
+    return reqSend('otherSysLoginUrl', {redirect_uri, client, state});
   },
   webSocketCmd(type, cmd, data) {
     return reqSend('webSocketCmd', {type, cmd, data});

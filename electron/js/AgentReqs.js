@@ -5,8 +5,8 @@ const bgReqSend = (cmd, data) => {
 }
 
 module.exports = {
-  otherSysLoginUrl(redirect_uri, state) {
-    return bgReqSend('otherSysLoginUrl', {redirect_uri, state})
+  otherSysLoginUrl(redirect_uri, client, state) {
+    return bgReqSend('otherSysLoginUrl', {redirect_uri, client, state})
   },
   // home() {
   //   return new Promise(resolve => app('home', {}, () => resolve()))
