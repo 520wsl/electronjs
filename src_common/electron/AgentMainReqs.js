@@ -6,9 +6,16 @@ const reqSend = (cmd, data) => {
 }
 
 const reqs = {
-  toHome(user) {
-    return reqSend('toHome', user);
+  exit() {
+    return reqSend('exit', {});
+  },
+  toHome() {
+    return reqSend('toHome', {});
+  },
+  loginAfter() {
+    return reqSend('loginAfter', {});
   }
 }
+
 const name = 'main';
 export default {name, reqs}

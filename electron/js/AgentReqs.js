@@ -8,6 +8,9 @@ module.exports = {
   otherSysLoginUrl(redirect_uri, client, state) {
     return bgReqSend('otherSysLoginUrl', {redirect_uri, client, state})
   },
+  logout() {
+    return bgReqSend('logout')
+  },
   // home() {
   //   return new Promise(resolve => app('home', {}, () => resolve()))
   // },

@@ -1,8 +1,7 @@
 const {ipcMain} = require('electron');
 const Utils = require('./utils.js');
-const cmds = require('./AgentCmds.js');
 
-const MSG_NAME = '__main_render_agent__';
+const MSG_NAME = '__agent__';
 ipcMain.on(MSG_NAME + 'ready', (event, name) => {
   if (typeof name !== "string") return
   _msg[name] = {};
@@ -10,6 +9,7 @@ ipcMain.on(MSG_NAME + 'ready', (event, name) => {
   _run(name);
 })
 ipcMain.on(MSG_NAME + 'req', (event, arg) => {
+  console.log("main-req", arg);
   const {target, uuid, cmd, data} = arg;
   const _reqCb = {
     s: (data) => __reqCb(event.sender, uuid, true, data),
@@ -33,8 +33,13 @@ ipcMain.on(MSG_NAME + 'req', (event, arg) => {
 
 })
 ipcMain.on(MSG_NAME + 'res', (event, arg) => {
+  console.log("main-res", arg);
   const {uuid, res, name} = arg;
-  if (!uuid || !_msg[name] || !_msg[name][uuid]) return;
+  if (!uuid || !_msg[name] || !_msg[name][uuid]) {
+    console.log(uuid);
+    console.log(_msg[name]);
+    return;
+  }
   if (res.s) {
     _msg[name][uuid].resolve(res.data);
   } else {
@@ -88,9 +93,11 @@ const _send_run = ({target, cmd, data, resolve, reject}) => {
   }
   _senderMap[target].send(MSG_NAME + 'req', req)
 }
+let cmds = {}
 
 module.exports = {
-  init() {
+  init(_cmds) {
+    cmds = _cmds || {}
   },
   send: _send
 };

@@ -4,7 +4,7 @@ import SHA256 from 'crypto-js/sha256'
 import APP_CONFIG from '../src_common/electron/APP_CONFIG'
 import UserApi from "./webSocket/Api/user"
 import Utils from "../src_common/utils/utils";
-
+import AgentMainReqs from '../src_common/electron/AgentMainReqs'
 
 const LSKEY = 'I5HJB7FYCAURKGTN';
 const AESKEY = SHA256(APP_CONFIG.CHAOS).toString();
@@ -44,9 +44,11 @@ const app = {
             this.setUser(user)
             UserApi.login(user)
               .then(() => {
-                resolve(user)
+                resolve(user);
+                AgentMainReqs.reqs.loginAfter();
               })
-              .catch(() => {
+              .catch((e) => {
+                console.error(e)
                 app.logout()
                 resolve(false)
               })

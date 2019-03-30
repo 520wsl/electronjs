@@ -1,5 +1,5 @@
 const Electron = require('electron');
-const {app, Menu, Tray, BrowserWindow} = Electron;
+const {app, Menu, Tray, BrowserWindow, MenuItem} = Electron;
 const Path = require('path');
 const Utils = require('./js/utils.js')
 const fs = require('fs')
@@ -47,13 +47,16 @@ const app_menu = require('./js/Menu.js')
 const AutoStart = require('./js/AutoStart.js');
 const UpdateApp = require('./js/UpdateApp.js');
 const Agent = require('./js/Agent.js');
-Agent.init();
+const AgentCmds = require('./js/AgentCmds.js');
+const Actions = require('./js/Actions.js')
+
+Agent.init(AgentCmds);
 const APP_LOGO_IMG = Path.join(__dirname, global._APP_CONFIG_.APP_LOGO_IMG)
 const APP_LOGO_MIN_IMG = Path.join(__dirname, global._APP_CONFIG_.APP_LOGO_MIN_IMG)
 
 class WindowBuilder {
-  constructor(path, option) {
-    this.PATH = this.OPTION = this.win = this.tray = this.trayMenu = null;
+  constructor(option) {
+    this.OPTION = this.win = this.tray = this.trayMenu = null;
     const defaultOption = {
       width: 800,
       height: 600,
@@ -62,7 +65,6 @@ class WindowBuilder {
     }
     Object.assign(defaultOption, option);
     this.OPTION = JSON.parse(JSON.stringify(defaultOption));
-    this.PATH = path;
 
     this.initWindow();
     this.initTray();
@@ -70,14 +72,6 @@ class WindowBuilder {
     this.initEvent();
   }
 
-  toHome() {
-    const win = this.win;
-    if ((/^https?/).test(this.PATH)) {
-      win.loadURL(this.PATH);
-    } else {
-      win.loadFile(this.PATH);
-    }
-  }
 
   initWindow() {
     Menu.setApplicationMenu(app_menu)
@@ -86,9 +80,6 @@ class WindowBuilder {
     if (process.env.NODE_ENV === 'development') {
       win.webContents.openDevTools();
     }
-
-    this.toHome()
-
   }
 
   initTray() {
@@ -97,17 +88,17 @@ class WindowBuilder {
     this.tray = tray;
     const trayMenu = Menu.buildFromTemplate([
       {
+        id: 'show',
+        label: '显示',
+        click: () => {
+          Actions.show();
+        }
+      },
+      {
         id: 'up',
         label: '更新',
         click: () => {
           UpdateApp.check();
-        }
-      },
-      {
-        id: 'show',
-        label: '显示',
-        click: () => {
-          win.show()
         }
       },
       {
@@ -134,8 +125,7 @@ class WindowBuilder {
         id: 'destroy',
         label: '退出',
         click: () => {
-          win.destroy()
-          _background && _background.destroy();
+          Actions.exit();
         }
       }
     ]);
@@ -185,6 +175,17 @@ class WindowBuilder {
   refreshTrayMenu() {
     this.tray.setContextMenu(this.trayMenu);
   }
+
+  hide() {
+    this.win.hide();
+    this.win.setSkipTaskbar(true);
+  }
+
+  show() {
+    this.win.show();
+    this.win.setSkipTaskbar(false);
+    this.win.focus()
+  }
 }
 
 
@@ -193,49 +194,28 @@ let _mainWindow;
 let _background;
 let createBackgroundWindow = () => {
   let option = {
-    width: 0,
-    height: 0,
+    width: 500,
+    height: 350,
     icon: APP_LOGO_IMG,
-    webPreferences: {webSecurity: false}
+    webPreferences: {webSecurity: false},
+    frame: false,
+    resizable: false,
   }
+  _background = new BrowserWindow(option);
   if (process.env.NODE_ENV === 'development') {
-    option.width = 500;
-    option.height = 500;
-    _background = new BrowserWindow(option);
     _background.webContents.openDevTools();
-  } else {
-    _background = new BrowserWindow(option);
-    _background.hide();
-    _background.setSkipTaskbar(true);
   }
   _background.loadFile('./background/index.html');
-
   AddGlobal('BG_WINDOW', () => _background)
 
 
 }
 let createMainWindow = () => {
-  let isFile = true;
-  let url;
-  for (let i = 0, len = process.argv.length; i < len; i++) {
-    if ((/^-url:/).test(process.argv[i])) {
-      url = process.argv[i].replace(/^-url:/, '');
-      isFile = false;
-      break;
-    }
-  }
-  if (isFile) {
-    url = './html/index.html';
-  }
-  _mainWindow = new WindowBuilder(url);
-
-  AddGlobal('MAIN_WINDOW', () => _mainWindow)
-
-  UpdateApp.init();
-
   createBackgroundWindow();
-
-
+  _mainWindow = new WindowBuilder();
+  AddGlobal('MAIN_WINDOW', () => _mainWindow)
+  _mainWindow.hide()
+  UpdateApp.init();
 }
 
 app.on('ready', createMainWindow);

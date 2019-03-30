@@ -1,5 +1,6 @@
 import User from './User';
 import WsApi from './webSocket/Api'
+import store from './store'
 
 const cmds = {
   setUser(user, res) {
@@ -7,10 +8,14 @@ const cmds = {
     res.s();
   },
   isLogin(__, res) {
-    User.isLogin().then(d => res.s(d))
+    store.dispatch('isLogin', (s, user) => {
+      res[s ? 's' : 'f'](user)
+    })
   },
   logout(__, res) {
-    User.logout().then(() => res.s()).catch(e => res.f(e))
+    store.dispatch('logout', (s, e) => {
+      res[s ? 's' : 'f'](e)
+    })
   },
   removeUser(__, res) {
     User.removeUser();

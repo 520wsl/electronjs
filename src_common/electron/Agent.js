@@ -1,14 +1,14 @@
 import Electron from "./index"
 import Utils from "../utils"
 
-const MSG_NAME = '__main_render_agent__';
+const MSG_NAME = '__agent__';
 let ipcRenderer;
 const _init = (name, cmds) => {
   _cmds = cmds || {};
   _name = name;
   ipcRenderer = Electron.ipcRenderer;
   ipcRenderer.on(MSG_NAME + "req", (event, arg) => {
-    console.log(MSG_NAME + "req", arg);
+    console.log(_name + "req", arg);
     const {cmd, data, uuid} = arg;
     if (_cmds[cmd]) {
       let cb = (s, data) => {
@@ -24,7 +24,7 @@ const _init = (name, cmds) => {
     }
   });
   ipcRenderer.on(MSG_NAME + "res", (event, arg) => {
-    console.log(MSG_NAME + "res", arg);
+    console.log(_name + "res", arg);
     const {uuid, res} = arg;
     if (!uuid || !_msg[uuid]) return;
     if (res.s) {

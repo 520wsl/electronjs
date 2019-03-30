@@ -1,63 +1,55 @@
 const {Menu} = require('electron')
+const AddressSpectrum = require('./AddressSpectrum.js')
 const AgentReqs = require('./AgentReqs.js')
+const Actions = require('./Actions.js')
 
-const xxbBase = () => global._APP_CONFIG_.XXB_WEB_BASE;
-const webWin = () => global._MAIN_WINDOW_.win;
-const toXxb = (url, state) => AgentReqs.otherSysLoginUrl(xxbBase() + url, 'workorder', state).then(loginUrl => {
-  webWin().loadURL(loginUrl);
-})
-const toXxbPar = (par, state) => toXxb('?par=' + par, state)
+const buildMenu = (items) => {
+  let menus = [];
+  for (let label in items) {
+    if (!items.hasOwnProperty(label) || label.startsWith('_')) continue;
+    let menu = {label};
+    let item = items[label];
+    switch (typeof item) {
+      case "function": {
+        menu.click = item;
+        break;
+      }
+      case "object": {
+        menu.submenu = buildMenu(item);
+        break;
+      }
+    }
+    menus.push(menu)
+  }
+  return menus;
+}
 
-const template = [
-
+let template = [
   {
-    label: '首页',
-    click() {
-      global._MAIN_WINDOW_.toHome()
-    }
-  },
-  {
-    label: '查排名',
-    click() {
-      toXxbPar('cGFnZU5hbWUlM0RjaGVja1Jhbms=')
-    }
-  },
-  {
-    label: '我的服务',
-    click() {
-      toXxbPar('cGFnZU5hbWUlM0RwZXJzb25hbFNlcnZpZQ%3D%3D')
-    }
-  },
-  {
-    label: '找客服',
+    label: '系统',
     submenu: [
       {
-        label: '找运营专员',
+        label: '登出',
         click() {
-          toXxbPar('d29ya09yZGVyVHlwZSUzZDUlMjZwYWdlTmFtZSUzZGFkZEJpbGw=')
+          AgentReqs.logout().then(() => {
+            Actions.toBG();
+          })
         }
       },
       {
-        label: '找运客户主管',
+        label: '退出',
         click() {
-          toXxbPar('d29ya09yZGVyVHlwZSUzRDIlMjZwYWdlTmFtZSUzRGFkZEJpbGw=')
+          Actions.exit();
         }
       },
-      {
-        label: '找美工专员',
-        click() {
-          toXxbPar('d29ya09yZGVyVHlwZSUzZDMlMjZwYWdlTmFtZSUzZGFkZEJpbGw=')
-        }
-      },
-      {
-        label: '投诉建议',
-        click() {
-          toXxbPar('dHlwZSUzZGNvbXBsYWludHNTdWdnZXN0aW9ucyUyNnBhZ2VOYW1lJTNkYWRkQmlsbA==')
-        }
-      }
     ]
+
   }
 ]
+
+if (AddressSpectrum) {
+  template = template.concat(buildMenu(AddressSpectrum))
+}
 
 const menu = Menu.buildFromTemplate(template)
 

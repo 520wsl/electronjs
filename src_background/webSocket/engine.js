@@ -77,6 +77,7 @@ let Ws = (wsUrl, CmdHandlers, reLinkCd = 300000) => {
       msg,
       content: handleData(content),
       bizId: req.bizId,
+      reqData: req.data,
       extra: req.extra
     };
     SendMsg(msgObj);
