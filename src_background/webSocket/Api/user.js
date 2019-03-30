@@ -1,4 +1,5 @@
 import Ws from '../index.js'
+import User from '../../User'
 
 
 let send = function (name, msg) {
@@ -10,7 +11,10 @@ let Api = {
     return send('login_qr_code', {})
   },
   login_qr_code_status() {
-    return send('login_qr_code_status', {})
+    return send('login_qr_code_status', {}).then(res => {
+      User.setUser(res.content)
+      return res;
+    })
   },
   login(user) {
     return send('login', {user})

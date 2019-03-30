@@ -1,4 +1,5 @@
-import store from '../../../store'
+import User from '../../User'
+import MainReqs from '../../../src_common/electron/AgentMainReqs'
 
 let Cmds = {
   kick_out(req, res) {
@@ -6,7 +7,8 @@ let Cmds = {
     new Notification("您已被踢出登录", {
       body: val
     });
-    store.dispatch('logout')
+    User.removeLocalUser();
+    MainReqs.reqs.toHome()
   }
 };
 

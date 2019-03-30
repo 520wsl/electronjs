@@ -1,16 +1,16 @@
 <template>
   <div class="container">
     <Poptip trigger="hover" :placement="placement" width="255">
-      <Avatar :src="wxUser.headimgurl" shape="square" icon="ios-person" size="large"/>
+      <Avatar :src="user.headImg" shape="square" icon="ios-person" size="large"/>
       <div slot="content">
         <Row>
           <i-col span="17" style="padding: 5px" class="nick">
-            <span :title="wxUser.nickname">{{wxUser.nickname}}</span>
-            <img v-if="wxUser.sex === 2" src="../assets/female.png">
-            <img v-if="wxUser.sex === 1" src="../assets/male.png">
+            <span :title="user.nick">{{user.nick}}</span>
+            <img v-if="user.sex === 'female'" src="../assets/female.png">
+            <img v-if="user.sex === 'male'" src="../assets/male.png">
           </i-col>
           <i-col span="7" style="text-align: center">
-            <img :src="wxUser.headimgurl" class="head-img">
+            <img :src="user.headImg" class="head-img">
           </i-col>
         </Row>
         <div class="separate"></div>
@@ -19,7 +19,7 @@
             地区
           </i-col>
           <i-col span="17">
-            {{wxUser.province}}&nbsp;{{wxUser.city}}
+            {{user.province}}&nbsp;{{user.city}}
           </i-col>
         </Row>
         <div class="separate"></div>
@@ -47,12 +47,6 @@
       ...mapState({
         user: state => state.user.user,
       }),
-      wxUser() {
-        return this.user.wx;
-      },
-      sxUser() {
-        return this.user.sx;
-      }
     },
     data() {
       let data = {};

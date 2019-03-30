@@ -2,7 +2,7 @@ const Electron = require('electron');
 const {app, Menu, Tray, BrowserWindow} = Electron;
 const Path = require('path');
 const Utils = require('./js/utils.js')
-const app_menu = require('./js/Menu.js')
+const fs = require('fs')
 const AddGlobal = (key, valFn) => {
   Object.defineProperty(global, `_${key.toUpperCase()}_`, {
     get() {
@@ -14,6 +14,9 @@ const AddGlobal = (key, valFn) => {
     configurable: false
   });
 }
+
+AddGlobal('FIRST_START', () => !fs.existsSync('data.db'))
+
 try {
   let config = require('../config/application.js')
 
@@ -38,8 +41,13 @@ try {
 } catch (e) {
   console.error(e);
 }
+// eslint-disable-next-line no-unused-vars
+const nedb = require('./js/Nedb.js')
+const app_menu = require('./js/Menu.js')
 const AutoStart = require('./js/AutoStart.js');
 const UpdateApp = require('./js/UpdateApp.js');
+const Agent = require('./js/Agent.js');
+Agent.init();
 const APP_LOGO_IMG = Path.join(__dirname, global._APP_CONFIG_.APP_LOGO_IMG)
 const APP_LOGO_MIN_IMG = Path.join(__dirname, global._APP_CONFIG_.APP_LOGO_MIN_IMG)
 
@@ -62,20 +70,25 @@ class WindowBuilder {
     this.initEvent();
   }
 
+  toHome() {
+    const win = this.win;
+    if ((/^https?/).test(this.PATH)) {
+      win.loadURL(this.PATH);
+    } else {
+      win.loadFile(this.PATH);
+    }
+  }
+
   initWindow() {
     Menu.setApplicationMenu(app_menu)
-
     const win = new BrowserWindow(this.OPTION);
     this.win = win;
     if (process.env.NODE_ENV === 'development') {
       win.webContents.openDevTools();
     }
 
-    if ((/^https?/).test(this.PATH)) {
-      win.loadURL(this.PATH);
-    } else {
-      win.loadFile(this.PATH);
-    }
+    this.toHome()
+
   }
 
   initTray() {
@@ -87,7 +100,7 @@ class WindowBuilder {
         id: 'up',
         label: '更新',
         click: () => {
-          UpdateApp();
+          UpdateApp.check();
         }
       },
       {
@@ -108,7 +121,6 @@ class WindowBuilder {
             checked: false,
             visible: false,
             click: (menuItem) => {
-              console.log('clickAutoStart')
               AutoStart(menuItem.checked).catch(err => {
                 console.error(err);
                 menuItem.checked = !menuItem.checked;
@@ -123,6 +135,7 @@ class WindowBuilder {
         label: '退出',
         click: () => {
           win.destroy()
+          _background && _background.destroy();
         }
       }
     ]);
@@ -177,6 +190,30 @@ class WindowBuilder {
 
 // eslint-disable-next-line no-unused-vars
 let _mainWindow;
+let _background;
+let createBackgroundWindow = () => {
+  let option = {
+    width: 0,
+    height: 0,
+    icon: APP_LOGO_IMG,
+    webPreferences: {webSecurity: false}
+  }
+  if (process.env.NODE_ENV === 'development') {
+    option.width = 500;
+    option.height = 500;
+    _background = new BrowserWindow(option);
+    _background.webContents.openDevTools();
+  } else {
+    _background = new BrowserWindow(option);
+    _background.hide();
+    _background.setSkipTaskbar(true);
+  }
+  _background.loadFile('./background/index.html');
+
+  AddGlobal('BG_WINDOW', () => _background)
+
+
+}
 let createMainWindow = () => {
   let isFile = true;
   let url;
@@ -194,7 +231,11 @@ let createMainWindow = () => {
 
   AddGlobal('MAIN_WINDOW', () => _mainWindow)
 
-  UpdateApp(_mainWindow);
+  UpdateApp.init();
+
+  createBackgroundWindow();
+
+
 }
 
 app.on('ready', createMainWindow);

@@ -6,15 +6,15 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-
+    iframeUrl: null
   },
   mutations: {
-
+    setIframeUrl(state, url) {
+      state.iframeUrl = url;
+    },
   },
-  actions: {
-
-  },
-  modules:{
+  actions: {},
+  modules: {
     user
   }
 })

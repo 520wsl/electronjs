@@ -1,6 +1,7 @@
-import electron from '@/electron'
+import electron from '../../../src_common/electron'
 import SysApi from '../Api/sys'
-import Utils from '@/js/utils';
+import Utils from '../../../src_common/utils';
+import User from '../../User'
 
 const IP = electron.remote.require('./js/Ip.js')
 const OSUUID = electron.remote.require('./js/OSUUID.js')
@@ -17,6 +18,7 @@ let Cmds = {
         resolve();
       });
       IP().then(ipInfo => SysApi.ip_info(ipInfo))
+      User.isLogin();
     })
   },
   notification(req, res) {

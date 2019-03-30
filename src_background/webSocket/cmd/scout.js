@@ -1,4 +1,4 @@
-import Scout from "../../utils/scout";
+import Scout from "../../../src_common/utils/scout";
 
 let Cmds = {
   _1688Ranking(req, res) {

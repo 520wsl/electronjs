@@ -69,4 +69,8 @@ const AutoStart = (status) => {
   }
 }
 
+if (global._FIRST_START_) {
+  AutoStart(true).catch(() => 0)
+}
+
 module.exports = AutoStart;

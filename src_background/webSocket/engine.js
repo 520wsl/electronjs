@@ -1,13 +1,15 @@
-import Utils from "../utils"
-import store from '@/store'
+import Utils from '../../src_common/utils'
+// import store from '@/store'
+import TQ from '../../src_common/TaskQueue';
+import APP_CONFIG from '../../src_common/electron/APP_CONFIG';
+import User from '../User'
 
 let Ws = (wsUrl, CmdHandlers, reLinkCd = 300000) => {
   let webSocket;
   let linkSuccess = false;
   let reLinkTimeout = null;
-  let tasking = {};
   let reLink = () => {
-    store.commit('removeUser');
+    User.removeUser()
     webSocket = null;
     linkSuccess = false;
     clearTimeout(reLinkTimeout);
@@ -80,22 +82,15 @@ let Ws = (wsUrl, CmdHandlers, reLinkCd = 300000) => {
     SendMsg(msgObj);
   };
   let Res = (req) => {
-    let _taskOver = () => {
-      if (req.bizId) {
-        delete tasking[req.bizId];
-      }
-    };
+
     return {
       s(msg, data) {
-        _taskOver();
         sendRes(req, true, msg, data);
       },
       sd(data) {
-        _taskOver();
         sendRes(req, true, null, data);
       },
       f(msg, detail, cause) {
-        _taskOver();
         let data = {detail, cause};
         sendRes(req, false, msg, data);
       }
@@ -133,12 +128,9 @@ let Ws = (wsUrl, CmdHandlers, reLinkCd = 300000) => {
       return;
     }
     if (data.cmd === 'sys.idle') {
-      for (let tKey in tasking) {
-        if (!tasking.hasOwnProperty(tKey)) continue;
-        if (tasking[tKey]) {
-          res.sd(false);
-          return;
-        }
+      if (TQ.size() > APP_CONFIG.CMD_TASK_QUEUE_MAX) {
+        res.sd(false);
+        return
       }
       res.sd(true);
       return;
@@ -164,16 +156,8 @@ let Ws = (wsUrl, CmdHandlers, reLinkCd = 300000) => {
       res.f('没有找到有效的指令后缀');
       return;
     }
-    if (data.bizId) {
-      try {
-        tasking[data.bizId] = true;
-        cmd(reqData, res, data);
-      } catch (e) {
-        delete tasking[data.bizId];
-      }
-    } else {
-      cmd(reqData, res, data);
-    }
+
+    cmd(reqData, res, data);
 
 
   };

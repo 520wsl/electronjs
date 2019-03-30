@@ -1,25 +1,9 @@
-import AES from 'crypto-js/aes'
-import ENC_UTF8 from 'crypto-js/enc-utf8'
-import SHA256 from 'crypto-js/sha256'
+import Vue from 'vue'
 import router from "../router"
-import _APP_CONFIG_ from '@/electron/APP_CONFIG.js';
-import UserApi from "../js/webSocket/Api/user.js"
 
-let LSKEY = 'I5HJB7FYCAURKGTN';
-let AESKEY = SHA256(_APP_CONFIG_.CHAOS).toString();
+const isElectron = () => !!Vue.prototype.Electron;
+const BgReq = () => Vue.prototype.BgReq;
 
-let getLocalUser = () => {
-  let cipher = localStorage.getItem(LSKEY)
-  if (!cipher) return null;
-  let bytes = AES.decrypt(cipher, AESKEY);
-  return JSON.parse(bytes.toString(ENC_UTF8));
-}
-let setLocalUser = (user) => {
-  localStorage.setItem(LSKEY, AES.encrypt(JSON.stringify(user), AESKEY).toString())
-}
-let logoutLocalUser = () => {
-  localStorage.removeItem(LSKEY)
-}
 export default {
   state: {
     user: null,
@@ -27,18 +11,10 @@ export default {
   getters: {},
   mutations: {
     setUser(state, user) {
-      const time = new Date().getTime();
-      user.__last__ = time;
-      if (!user.__first__) user.__first__ = time;
       state.user = user;
-      setLocalUser(user);
-    },
-    removeUser(state) {
-      state.user = null;
     },
     logout(state) {
       state.user = null;
-      logoutLocalUser();
     }
   },
   actions: {
@@ -47,28 +23,23 @@ export default {
       if (context.state.user) {
         cb(true)
       } else {
-        try {
-          let user = getLocalUser()
-          if (!user) {
-            cb(false)
-          } else {
-            UserApi.login(user)
-              .then(() => {
-                context.commit('setUser', user)
-                cb(true)
-              })
-              .catch(() => {
-                context.commit('logout', user)
-                cb(false)
-              })
-          }
-        } catch (e) {
+        if (!isElectron()) {
           cb(false)
+          return;
         }
+        BgReq().isLogin()
+          .then(user => {
+            if (user) {
+              context.commit('setUser', user)
+              cb(true)
+            } else {
+              cb(false)
+            }
+          })
       }
     },
     logout(context, ecb) {
-      UserApi.logout().then(() => {
+      BgReq().logout().then(() => {
         context.commit('logout');
         router.push({name: 'login'})
       }).catch(err => ecb && ecb(err))

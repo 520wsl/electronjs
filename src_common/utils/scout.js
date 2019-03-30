@@ -23,10 +23,7 @@ let _1688ItemSelector = (item, selector) => {
   let pass = true;
   for (let key in selector) {
     if (!selector.hasOwnProperty(key)) continue;
-    if (!_1688ItemSelectors[key]) {
-      pass = false;
-      break;
-    }
+    if (!_1688ItemSelectors[key]) continue;
     if (!_1688ItemSelectors[key](item, selector[key], selector)) {
       pass = false;
       break;
@@ -215,6 +212,7 @@ let app = {
           for (let _sI = 0; _sI < _sSize; _sI++) {
             if (_1688ItemSelector(item, selector[_sI])) {
               result.push({
+                _id_: selector[_sI]._id_,
                 selectorIndex: _sI,
                 pageIndex,
                 pageNum,

@@ -1,4 +1,4 @@
-import _APP_CONFIG_ from '@/electron/APP_CONFIG.js';
+import _APP_CONFIG_ from './electron/APP_CONFIG';
 
 let TQ = {
   running: false,
