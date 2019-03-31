@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <div class="bg drag"></div>
     <!--<canvas id="appBgCanvas"></canvas>-->
     <Login v-if="inited && !user" class="login"></Login>
     <Card v-if="user" class="user">
@@ -68,15 +69,29 @@
     position: relative;
     width: 100%;
     height: 100%;
-    background: url("../assets/login-bg.png");
-      opacity:0.879;
-    background-size: 100% 100%;
-    #appBgCanvas{
+
+    .drag {
+      -webkit-app-region: drag;
+    }
+
+    .bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("../assets/login-bg.png");
+      opacity: 0.879;
+      background-size: 100% 100%;
+    }
+
+    #appBgCanvas {
       position: absolute;
       width: 100%;
       height: 100%;
     }
-    *:not(#appBgCanvas) {
+
+    *:not(.drag) {
       -webkit-app-region: no-drag;
     }
 
@@ -106,7 +121,6 @@
       transform: translateY(-50%);
       margin: auto;
     }
-
 
 
   }
