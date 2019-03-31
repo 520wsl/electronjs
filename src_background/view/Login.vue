@@ -15,6 +15,7 @@
   import {mapMutations} from 'vuex'
   import userApi from '../webSocket/Api/user'
   import AgentMainReqs from '../../src_common/electron/AgentMainReqs'
+  import APP_CONFIG from '../../src_common/electron/APP_CONFIG'
 
   const AgentReqs = AgentMainReqs.reqs;
   let loginStatusInterval;
@@ -44,8 +45,8 @@
           .then(res => {
             this.codeUrl = res.content.val;
             this.clear();
-            loginStatusInterval = setInterval(() => this.loginStatus(), 3000)
-            loginStatusTimeout = setTimeout(() => this.timeOut(), 180000)
+            loginStatusInterval = setInterval(() => this.loginStatus(), APP_CONFIG.LOGIN_QR_CODE_STATUS_CD || 5000)
+            loginStatusTimeout = setTimeout(() => this.timeOut(), APP_CONFIG.LOGIN_QR_CODE_EXPIRED || 120000)
           }).catch(err => {
           console.log(err)
         })
@@ -78,11 +79,16 @@
 
     .qr-card {
       position: relative;
-      width: 255px;
+
+      /deep/ .ivu-card-body {
+        padding: 0;
+      }
+
       .qr {
         position: relative;
         width: 221px;
         height: 221px;
+
         .qr-img {
           width: 100%;
         }

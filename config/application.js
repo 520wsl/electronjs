@@ -20,11 +20,15 @@ module.exports = {
   TASK_QUEUE_TIME_OUT: 180000,
   //接到sys.idle(是否有空闲执行任务)指令时任务队列上限
   CMD_TASK_QUEUE_MAX: 2,
+  //登录二维码过期时间
+  LOGIN_QR_CODE_EXPIRED: 120000,
+  //登录二维码状态获取间隔
+  LOGIN_QR_CODE_STATUS_CD: 3500,
   CHAOS: "poZrONA3i5BHlEateSC0MbhQKWUsGqdL",
   //登录其它系统使用的授权链接
   OAUTH_OTHER_SYS_URL: "https://oauth.sixi.com/oauth/authorize",
   CDN: "http://custom-center.oss-cn-hangzhou.aliyuncs.com/customerCenter/image",
-  XXB_WEB_BASE: "http://172.30.34.114:8081",
+  XXB_WEB_BASE: "https://workapp.sixi.com",
 
   //API
   API_BASE: "https://" + BASE_DOMAIN,

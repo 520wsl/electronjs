@@ -21,15 +21,17 @@ let _1688ItemSelectors = {
 };
 let _1688ItemSelector = (item, selector) => {
   let pass = true;
+  let notKey = true;
   for (let key in selector) {
     if (!selector.hasOwnProperty(key)) continue;
     if (!_1688ItemSelectors[key]) continue;
+    if(notKey) notKey = false;
     if (!_1688ItemSelectors[key](item, selector[key], selector)) {
       pass = false;
       break;
     }
   }
-  return pass;
+  return pass && !notKey;
 };
 let _1688OneItemBase = (data, exception, pNode, selectorOrNode, keys) => {
   let nodes;
@@ -153,10 +155,11 @@ let Resolver = {
 const DEFAULT_PAGE_SIZE = 60;
 let app = {
   _1688RankingSales(keywords, selector, parameter, needItem, maxPage, pageSize = DEFAULT_PAGE_SIZE) {
-    if (!selector) {
-      selector = {}
+    if (!parameter) {
+      parameter = {}
     }
-    selector = {
+    parameter = {
+      ...parameter,
       descendOrder: true,
       sortType: 'va_rmdarkgmv30rt',
       uniqfield: 'userid'

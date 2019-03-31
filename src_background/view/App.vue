@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <!--<canvas id="appBgCanvas"></canvas>-->
     <Login v-if="inited && !user" class="login"></Login>
     <Card v-if="user" class="user">
       <User></User>
@@ -15,6 +16,7 @@
   import User from './User'
   import {mapState, mapActions} from 'vuex'
   import AgentMainReqs from '../../src_common/electron/AgentMainReqs'
+  // import StarrySky from '../js/StarrySky'
 
   const AgentReqs = AgentMainReqs.reqs;
 
@@ -37,6 +39,7 @@
       }
     },
     mounted() {
+      // StarrySky(document.getElementById("appBgCanvas"))
       this.isLogin(() => {
         this.inited = true;
       })
@@ -66,8 +69,12 @@
     height: 100%;
     background: url("../assets/login-bg.png");
     background-size: 100% 100%;
-
-    * {
+    #appBgCanvas{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    *:not(#appBgCanvas) {
       -webkit-app-region: no-drag;
     }
 
@@ -90,12 +97,15 @@
     }
 
     .login {
-      width: 253px;
-      height: 253px;
+      width: 223px;
+      height: 223px;
       position: relative;
       top: 50%;
       transform: translateY(-50%);
       margin: auto;
     }
+
+
+
   }
 </style>
