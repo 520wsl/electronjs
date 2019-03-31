@@ -2,11 +2,24 @@
   <div class="container">
     <Card class="qr-card">
       <div class="qr">
-        <img draggable="false" class="qr-img" :src="codeUrl">
-        <img draggable="false" v-if="!!codeUrl" class="wx" src="../assets/wxlogo.png">
-        <div v-if="isTimeOut">
-          <Button type="dashed" @click="loadCode">二维码过期点击刷新</Button>
+        <template v-if="!!codeUrl">
+          <img draggable="false" class="qr-img" :src="codeUrl">
+          <img draggable="false" class="wx" src="../assets/wxlogo.png">
+          <div v-if="isTimeOut" class="time-out">
+            <Button type="dashed" @click="loadCode">二维码过期点击刷新</Button>
+          </div>
+        </template>
+        <div v-else class="loader-div">
+          <div class="loader">
+            <div class="face">
+              <div class="circle"></div>
+            </div>
+            <div class="face">
+              <div class="circle"></div>
+            </div>
+          </div>
         </div>
+
       </div>
     </Card>
   </div>
@@ -41,6 +54,7 @@
       loadCode() {
         this.clear();
         this.isTimeOut = false;
+        this.codeUrl = null;
         userApi.login_qr_code()
           .then(res => {
             this.codeUrl = res.content.val;
@@ -97,11 +111,22 @@
           position: absolute;
           top: 50%;
           left: 50%;
+          width: 50px;
           transform: translate(-50%, -50%);
           margin: auto;
         }
 
-        > div {
+        .loader-div {
+          position: absolute;
+          background: rgba(0, 0, 0, 0.2);
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          padding: 50px;
+        }
+
+        .time-out {
           position: absolute;
           top: 0;
           bottom: 0;
