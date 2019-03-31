@@ -1,6 +1,7 @@
 import User from './User';
 import WsApi from './webSocket/Api'
 import store from './store'
+import Scout from "../src_common/utils/scout";
 
 const cmds = {
   setUser(user, res) {
@@ -40,6 +41,24 @@ const cmds = {
     WsApi[type][cmd].apply(WsApi[type], data)
       .then(d => res.s(d))
       .catch(e => res.f(e))
+  },
+  _1688Ranking(req, res) {
+    let {keywords, selector, parameter, needItem, maxPage, pageSize} = req;
+    Scout._1688Ranking(keywords, selector, parameter, needItem, maxPage, pageSize)
+      .then(list => res.s(list))
+      .catch(err => res.f('查询1688排名失败', err));
+  },
+  _1688RankingSales(req, res) {
+    let {keywords, selector, parameter, needItem, maxPage, pageSize} = req;
+    Scout._1688RankingSales(keywords, selector, parameter, needItem, maxPage, pageSize)
+      .then(list => res.s(list))
+      .catch(err => res.f('查询1688排名失败', err));
+  },
+  _1688Search(req, res) {
+    let {keywords, parameter, pageTotal, pageSize} = req;
+    Scout._1688Search(keywords, parameter, pageTotal, pageSize)
+      .then(list => res.s(list))
+      .catch(err => res.f('查询1688商品', err));
   }
 }
 

@@ -58,8 +58,8 @@ class WindowBuilder {
   constructor(option) {
     this.OPTION = this.win = this.tray = this.trayMenu = null;
     const defaultOption = {
-      width: 800,
-      height: 600,
+      width: 750,
+      height: 900,
       icon: APP_LOGO_IMG,
       webPreferences: {webSecurity: false}
     }

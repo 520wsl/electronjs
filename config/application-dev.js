@@ -9,4 +9,5 @@ module.exports = {
   OAUTH_OTHER_SYS_URL: "https://test-oauth.sixi.com/oauth/authorize",
   XXB_WEB_BASE: "http://172.30.34.114:8081",
 
+
 }

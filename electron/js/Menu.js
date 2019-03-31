@@ -29,7 +29,7 @@ let template = [
     label: '系统',
     submenu: [
       {
-        label: '登出',
+        label: '注销',
         click() {
           AgentReqs.logout().then(() => {
             Actions.toBG();

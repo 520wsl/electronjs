@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+</body>
+<script>
+  let Agent;
+  fetch('AgentEmbed.js').then(d => d.text()).then(js => {
+    Agent = (new Function('return ' + js))();
+    console.log(Agent.init('xxb'));
+    const bgReqSend = (cmd, data) => {
+      return Agent.send({target: 'background', cmd, data})
+    }
+    const bgReq = {
+      logout() {
+        return bgReqSend('logout', {});
+      },
+      _1688Ranking(keywords, selector, parameter, needItem, maxPage, pageSize) {
+        return bgReqSend('_1688Ranking', {keywords, selector, parameter, needItem, maxPage, pageSize});
+      },
+      _1688RankingSales(keywords, selector, parameter, needItem, maxPage, pageSize) {
+        return bgReqSend('_1688RankingSales', {keywords, selector, parameter, needItem, maxPage, pageSize});
+      },
+      _1688Search(keywords, parameter, pageTotal, pageSize) {
+        return bgReqSend('_1688Search', {keywords, parameter, pageTotal, pageSize});
+      },
+    }
+    bgReq._1688RankingSales(
+      'ppr冷热水管厂家',
+      [
+        {
+          "shopName": "浙江企顺管业科技有限公司"
+        }
+      ],
+      {},
+      true
+    ).then(data => {
+      console.log(data)
+    })
+  })
+</script>
+</html>
