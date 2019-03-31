@@ -1,7 +1,7 @@
 {
   "name": "sixi.client.electronjs",
   "description": "喜小帮",
-  "version": "0.1.6",
+  "version": "1.0.0",
   "author": "杭州四喜信息技术有限公司",
   "private": true,
   "license": "UNLICENSED",
@@ -20,7 +20,7 @@
     "package:win64": "electron-builder --win --x64 && mkdir ./dist/win32_x64 && mv ./dist/xxb_* ./dist/win32_x64/ && mv ./dist/latest.yml ./dist/win32_x64/",
     "clean": "rm -rf ./dist",
     "build": "npm run build:base && npm run package",
-    "build:base": "npm run clean && npm run build:background && npm run build:vue",
+    "build:base": "npm run clean && npm run build:background",
     "build:background": "rm -rf ./background && webpack --config ./background_webpack.config.js --mode=production",
     "build:linux": "npm run build:base && npm run package:linux",
     "build:win32": "npm run build:base && npm run package:win32",

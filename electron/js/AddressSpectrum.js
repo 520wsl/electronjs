@@ -2,10 +2,10 @@ const AgentReqs = require('./AgentReqs.js')
 
 const xxbBase = () => global._APP_CONFIG_.XXB_WEB_BASE;
 const webWin = () => global._MAIN_WINDOW_.win;
-const toXxb = (url, state) => AgentReqs.otherSysLoginUrl(xxbBase() + url, 'workorder', state).then(loginUrl => {
+const toXxb = (url) => AgentReqs.otherSysLoginUrl(xxbBase() + url, 'workorder', 'electron').then(loginUrl => {
   webWin().loadURL(loginUrl);
 })
-const toXxbPar = (par, state) => toXxb('?par=' + par, state)
+const toXxbPar = (par) => toXxb('?par=' + par)
 
 const Address = {
   '查排名': () => toXxbPar('cGFnZU5hbWUlM0RjaGVja1Jhbms='),
