@@ -200,9 +200,11 @@ let createBackgroundWindow = () => {
     webPreferences: {webSecurity: false},
     frame: false,
     resizable: false,
+      transparent: true,
+      backgroundColor:'#00000000'
   }
   _background = new BrowserWindow(option);
-  _background.setOpacity(0.8)
+  // _background.setOpacity(0.8)
 
   if (process.env.NODE_ENV === 'development') {
     _background.webContents.openDevTools();

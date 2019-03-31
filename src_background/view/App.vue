@@ -54,6 +54,7 @@
     border: 0;
     margin: 0;
     padding: 0;
+    background: transparent !important;
   }
 
   body {
@@ -68,6 +69,7 @@
     width: 100%;
     height: 100%;
     background: url("../assets/login-bg.png");
+      opacity:0.879;
     background-size: 100% 100%;
     #appBgCanvas{
       position: absolute;
