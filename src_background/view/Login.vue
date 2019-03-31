@@ -6,7 +6,7 @@
           <img draggable="false" class="qr-img" :src="codeUrl">
           <img draggable="false" class="wx" src="../assets/wxlogo.png">
           <div v-if="isTimeOut" class="time-out">
-            <Button type="dashed" @click="loadCode">二维码过期点击刷新</Button>
+            <Button type="dashed" @click="loadCode">刷新二维码</Button>
           </div>
         </template>
         <div v-else class="loader-div">
